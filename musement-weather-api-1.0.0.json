@@ -1,0 +1,436 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Musement Weather API",
+    "description": "This is a prototype API design for weather forecast data.\n",
+    "termsOfService": "https://www.musement.com/",
+    "contact": {
+      "email": "stojowice@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "externalDocs": {
+    "description": "Find out more about Musement API",
+    "url": "https://api-docs.musement.com/"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/dibuco5/test/1.0.0",
+      "description": "SwaggerHub API Auto Mocking"
+    },
+    {
+      "url": "https://sandbox.musement.com/api/v3",
+      "description": "Sandbox server"
+    },
+    {
+      "url": "https://api.musement.com/api/v3",
+      "description": "Production server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "weather",
+      "description": "Weather forecast",
+      "externalDocs": {
+        "description": "Find out more about Weather API",
+        "url": "https://www.weatherapi.com"
+      }
+    }
+  ],
+  "paths": {
+    "/weather/{cityId}": {
+      "get": {
+        "tags": [
+          "Weather"
+        ],
+        "summary": "Get Weather condition for CityId for next days",
+        "description": "Returns Weather condition for the City and next few days",
+        "operationId": "GetWeatherCityId",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "default": "en-US"
+            }
+          },
+          {
+            "name": "X-Musement-Version",
+            "in": "header",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cityId",
+            "in": "path",
+            "description": "City identifier",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 13
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "description": "Number of days for the weather forecast",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned when successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeatherBulk"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned when invalid cityId"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Weather"
+        ],
+        "summary": "Bulk updates City Weather conditions",
+        "operationId": "PostWeatherCityId",
+        "parameters": [
+          {
+            "name": "X-Musement-Version",
+            "in": "header",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cityId",
+            "in": "path",
+            "description": "City identifier",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 13
+          }
+        ],
+        "requestBody": {
+          "description": "Bulk update weather info",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeatherBulk"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Returned when successful"
+          },
+          "400": {
+            "description": "Returned when invalid cityId"
+          },
+          "401": {
+            "description": "Returned when the weather condition payload is incorrect"
+          }
+        },
+        "security": [
+          {
+            "content_manager": [
+              "activity:admin"
+            ]
+          }
+        ]
+      }
+    },
+    "/weather/{cityId}/{date}": {
+      "get": {
+        "tags": [
+          "Weather"
+        ],
+        "summary": "Get Weather condition for CityId",
+        "description": "Returns Weather condition for the City and the specified day",
+        "operationId": "GetWeatherCityIdDate",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "default": "en-US"
+            }
+          },
+          {
+            "name": "X-Musement-Version",
+            "in": "header",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cityId",
+            "in": "path",
+            "description": "City identifier",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 13
+          },
+          {
+            "name": "date",
+            "in": "path",
+            "description": "Date, ICU format: 'YYYY-MM-DD'",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "example": "2020-12-04"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returned when successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Weather"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned when invalid cityId"
+          },
+          "404": {
+            "description": "Returned when Weather condition not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Weather"
+        ],
+        "summary": "Updates City Weather conditions",
+        "operationId": "PutWeatherCityIdDate",
+        "parameters": [
+          {
+            "name": "X-Musement-Version",
+            "in": "header",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cityId",
+            "in": "path",
+            "description": "City identifier",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 13
+          },
+          {
+            "name": "date",
+            "in": "path",
+            "description": "Date, ICU format: 'YYYY-MM-DD'",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "example": "2020-12-04"
+          }
+        ],
+        "requestBody": {
+          "description": "Weather condition data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Weather"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Returned when successful"
+          },
+          "400": {
+            "description": "Returned when invalid cityId"
+          },
+          "401": {
+            "description": "Returned when the weather condition payload is incorrect"
+          }
+        },
+        "security": [
+          {
+            "content_manager": [
+              "activity:admin"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Weather": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "example": "Sunny"
+          }
+        },
+        "description": "Weather condition"
+      },
+      "WeatherBulk": {
+        "required": [
+          "cityId",
+          "days"
+        ],
+        "type": "object",
+        "properties": {
+          "fromDate": {
+            "type": "string",
+            "description": "Date to start from, ICU format: 'YYYY-MM-DD'",
+            "example": "2020-12-04"
+          },
+          "forecast": {
+            "type": "array",
+            "description": "Weather condition data array",
+            "items": {
+              "$ref": "#/components/schemas/Weather"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "Accept-Language": {
+        "name": "Accept-Language",
+        "in": "header",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string",
+          "default": "en-US"
+        }
+      },
+      "X-Musement-Version": {
+        "name": "X-Musement-Version",
+        "in": "header",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "cityId": {
+        "name": "cityId",
+        "in": "path",
+        "description": "City identifier",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "integer"
+        },
+        "example": 13
+      },
+      "date": {
+        "name": "date",
+        "in": "path",
+        "description": "Date, ICU format: 'YYYY-MM-DD'",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string",
+          "format": "date"
+        },
+        "example": "2020-12-04"
+      },
+      "days": {
+        "name": "days",
+        "in": "query",
+        "description": "Number of days for the weather forecast",
+        "required": true,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "type": "integer"
+        },
+        "example": 2
+      }
+    },
+    "securitySchemes": {
+      "content_manager": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "tokenUrl": "https://api.musement.com/api/v3/login",
+            "refreshUrl": "https://api.musement.com/api/v3/refresh",
+            "scopes": {
+              "activity:admin": "Create and update weather info"
+            }
+          }
+        }
+      }
+    }
+  }
+}
