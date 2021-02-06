@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Get and parse Forecast Weather data for specified Cities
  *
  * @author Dominik
  */
-class WeatherapiForecast {
+class WeatherapiForecast
+{
 
 	private $cities;
 	private $singleCityApiResp;
@@ -20,7 +23,8 @@ class WeatherapiForecast {
 	 * @param string $_apiKey
 	 * @return $this
 	 */
-	public function setApiKey(string $_apiKey): self {
+	public function setApiKey(string $_apiKey): self
+	{
 		$this->apiKey = $_apiKey;
 
 		return $this;
@@ -32,7 +36,8 @@ class WeatherapiForecast {
 	 * @param string $_apiUri
 	 * @return $this
 	 */
-	public function setApiUri(string $_apiUri): self {
+	public function setApiUri(string $_apiUri): self
+	{
 		$this->weatherApiUri = $_apiUri;
 
 		return $this;
@@ -46,7 +51,8 @@ class WeatherapiForecast {
 	 * @param string $_hour eg. "12:00"
 	 * @return $this
 	 */
-	public function setForecastHour(string $_hour): self {
+	public function setForecastHour(string $_hour): self
+	{
 		$this->forecastHour = $_hour;
 
 		return $this;
@@ -58,7 +64,8 @@ class WeatherapiForecast {
 	 * @param json $_jsonCities
 	 * @return $this
 	 */
-	public function setCities(string $_jsonCities): self {
+	public function setCities(string $_jsonCities): self
+	{
 		$this->cities = json_decode($_jsonCities);
 
 		return $this;
@@ -69,11 +76,12 @@ class WeatherapiForecast {
 	 *
 	 * @return iterable
 	 */
-	public function getCitiesWithForecast(): iterable {
+	public function getCitiesWithForecast(): iterable
+	{
 		$forecast = new stdClass();
 		foreach ($this->cities as $city) {
 			$forecast->forecast = $this->makeApiRequestForCity($city)
-					->readForecastFromApiRequest();
+				->readForecastFromApiRequest();
 			$forecast->name = $city->name;
 
 			yield $forecast;
@@ -86,7 +94,8 @@ class WeatherapiForecast {
 	 * @param Object $_city
 	 * @return $this
 	 */
-	private function makeApiRequestForCity(stdClass $_city): self {
+	private function makeApiRequestForCity(stdClass $_city): self
+	{
 		$requestUri = sprintf($this->weatherApiUri, $this->apiKey, $_city->latitude, $_city->longitude, $this->daysForecast);
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $requestUri);
@@ -100,7 +109,8 @@ class WeatherapiForecast {
 		return $this;
 	}
 
-	private function checkApiResponse(int $curlCode) {
+	private function checkApiResponse(int $curlCode)
+	{
 		if ($curlCode != 200) {
 			error_log(var_export($this->singleCityApiResp, true));
 			exit('API ERROR');
@@ -112,7 +122,8 @@ class WeatherapiForecast {
 	 *
 	 * @return Array Forecast array (0 - now, 1 - today, 2 - tomorrow, etc.)
 	 */
-	private function readForecastFromApiRequest(): array {
+	private function readForecastFromApiRequest(): array
+	{
 		$day = 0;
 		$apiResp = json_decode($this->singleCityApiResp);
 		$weatherForecast[$day] = $apiResp->current->condition->text;
@@ -131,7 +142,8 @@ class WeatherapiForecast {
 	 * @param Object $_forecastday
 	 * @return string weather condition
 	 */
-	private function loadWeatherConditionText(stdClass $_forecastday): string {
+	private function loadWeatherConditionText(stdClass $_forecastday): string
+	{
 		if ($this->forecastHour == '00:00') {
 			return $_forecastday->day->condition->text;
 		}
@@ -145,7 +157,8 @@ class WeatherapiForecast {
 	 * @param Object $_forecastday
 	 * @return string weather condition
 	 */
-	private function loadWeatherForecastForTargetHour(stdClass $_forecastday): string {
+	private function loadWeatherForecastForTargetHour(stdClass $_forecastday): string
+	{
 		$targetTimestamp = $this->prepareTargetTimestamp($_forecastday);
 		$this->previousDiff = null;
 		foreach ($_forecastday->hour as $hour) {
@@ -165,7 +178,8 @@ class WeatherapiForecast {
 	 * @param integer $_diffFromTarget
 	 * @return boolean
 	 */
-	private function isHourCloserToTargetHour(int $_diffFromTarget): bool {
+	private function isHourCloserToTargetHour(int $_diffFromTarget): bool
+	{
 		if (is_null($this->previousDiff) || $_diffFromTarget < $this->previousDiff) {
 			$this->previousDiff = $_diffFromTarget;
 			return true;
@@ -180,12 +194,12 @@ class WeatherapiForecast {
 	 * @param Object $_forecastday
 	 * @return integer Unix Timestamp
 	 */
-	private function prepareTargetTimestamp(stdClass $_forecastday): int {
+	private function prepareTargetTimestamp(stdClass $_forecastday): int
+	{
 		$targetFormat = 'Y-m-d ' . $this->forecastHour;
 		$targetHourDate = date($targetFormat, $_forecastday->date_epoch);
 		$targetHourDateTime = DateTime::createFromFormat('Y-m-d h:i', $targetHourDate);
 
 		return $targetHourDateTime->getTimestamp();
 	}
-
 }

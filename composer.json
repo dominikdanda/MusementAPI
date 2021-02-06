@@ -1,0 +1,9 @@
+{
+    "name": "dominikdanda/musement_api",
+    "description": "Musement API",
+    "version": "1.0.0",
+    "require": {
+        "php": ">=8.0",
+        "phpunit/phpunit": "^9.5"
+    }
+}
