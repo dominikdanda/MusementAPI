@@ -16,7 +16,7 @@ class MusementCities
 
 	const MUSEMENT_GET_CITIES = '/cities?offset=%d&limit=%d';
 
-	public function getCities(): string | bool
+	public function loadCities(): string | bool
 	{
 		// if(!$this->isMusementApiSet()) {
 		// 	throw new Exception('Musement API URI Required');
@@ -45,11 +45,21 @@ class MusementCities
 		return $this;
 	}
 
+	public function getRowsLimit(): int
+	{
+		return $this->rowsLimit;
+	}
+
 	public function setRowsOffset(int $_limit): self
 	{
 		$this->rowsOffset = $_limit;
 
 		return $this;
+	}
+
+	public function getRowsOffset(): int
+	{
+		return $this->rowsOffset;
 	}
 
 	public function setMusementApiUri(string $_uri): self
@@ -59,12 +69,17 @@ class MusementCities
 		return $this;
 	}
 
-	private function isMusementApiSet(): bool
+	public function getMusementApiUri(): string
 	{
-		if (strlen($this->musementApiUri) <= 0) {
-			return false;
-		}
-
-		return true;
+		return $this->musementApiUri;
 	}
+
+	// private function isMusementApiSet(): bool
+	// {
+	// 	if (strlen($this->musementApiUri) <= 0) {
+	// 		return false;
+	// 	}
+
+	// 	return true;
+	// }
 }

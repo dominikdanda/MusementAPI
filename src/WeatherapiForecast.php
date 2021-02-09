@@ -76,7 +76,7 @@ class WeatherapiForecast
 	 *
 	 * @return iterable
 	 */
-	public function getCitiesWithForecast(): iterable
+	public function loadCitiesWithForecast(): iterable
 	{
 		$forecast = new stdClass();
 		foreach ($this->cities as $city) {

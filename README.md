@@ -3,6 +3,15 @@
 
 #### Configuration
 set the correct weatherApi's Api Key in `config.inc.php`
+```
+composer install
+composer dump-autoload
+```
+
+#### Tests
+```
+phpunit
+```
 
 
 #### Usage (CLI)

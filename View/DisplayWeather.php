@@ -3,18 +3,9 @@
 class DisplayWeather
 {
 
-    private $citiesWithForecast;
-
-    function setCitiesWithForecast($_citiesWithForecast): self
+    function showCitiesWithForecast($_citiesWithForecast): void
     {
-        $this->citiesWithForecast = $_citiesWithForecast;
-
-        return $this;
-    }
-
-    function show(): void
-    {
-        foreach ($this->citiesWithForecast as $cityForecast) {
+        foreach ($_citiesWithForecast as $cityForecast) {
             /**
              * 0 = ~now [eg. "Sunny"]
              * 1 = today (00:00) [eg. "Overcast"]
