@@ -3,12 +3,15 @@
     "description": "Musement API",
     "version": "1.0.0",
     "require": {
-        "php": ">=8.0",
+        "php": "^8.0",
         "phpunit/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
             "": "src/"
-        }
+        },
+        "files": [
+            "./config.inc.php"
+        ]
     }
 }

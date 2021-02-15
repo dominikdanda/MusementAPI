@@ -2,10 +2,7 @@
 
 declare(strict_types=1);
 
-require __DIR__ . '/../config.inc.php';
 require __DIR__ . '/../vendor/autoload.php';
-// require __DIR__.'/../src/MusementCities.php';
-// require __DIR__.'/../src/WeatherapiForecast.php';
 require __DIR__ . '/../View/DisplayWeather.php';
 
 $musementCities = new MusementCities;

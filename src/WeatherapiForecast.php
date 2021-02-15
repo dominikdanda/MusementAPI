@@ -30,6 +30,11 @@ class WeatherapiForecast
 		return $this;
 	}
 
+	public function getApiKey(): string
+	{
+		return $this->apiKey;
+	}
+
 	/**
 	 * Set WeatherAPI's URI
 	 *
@@ -41,6 +46,11 @@ class WeatherapiForecast
 		$this->weatherApiUri = $_apiUri;
 
 		return $this;
+	}
+
+	public function getApiUri(): string
+	{
+		return $this->weatherApiUri;
 	}
 
 	/**
@@ -58,6 +68,11 @@ class WeatherapiForecast
 		return $this;
 	}
 
+	public function getForecastHour(): string
+	{
+		return $this->forecastHour;
+	}
+
 	/**
 	 * Set Musement Cities
 	 *
@@ -69,6 +84,11 @@ class WeatherapiForecast
 		$this->cities = json_decode($_jsonCities);
 
 		return $this;
+	}
+
+	public function getCities(): string
+	{
+		return json_encode($this->cities);
 	}
 
 	/**

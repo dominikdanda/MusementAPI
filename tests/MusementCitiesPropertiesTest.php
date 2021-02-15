@@ -2,13 +2,14 @@
 
 use PHPUnit\Framework\TestCase;
 
-class MusementCitiesTest extends TestCase
+use function PHPUnit\Framework\assertTrue;
+
+class MusementCitiesPropertiesTest extends TestCase
 {
     protected static $musementCitiesInstance;
 
     public static function setUpBeforeClass(): void
     {
-        // static::$queue = new Queue;
         static::$musementCitiesInstance = new MusementCities;
     }
 
@@ -36,8 +37,23 @@ class MusementCitiesTest extends TestCase
         $this->assertEquals($dummyString, static::$musementCitiesInstance->getMusementApiUri());
     }
 
-    public function testLoadCities()
+    public function testSetAndGetMusementGetCitiesEndpoint()
     {
-        
+        $dummyString = md5(time());
+        static::$musementCitiesInstance->setMusementGetCitiesEndpoint($dummyString);
+
+        $this->assertEquals($dummyString, static::$musementCitiesInstance->getMusementGetCitiesEndpoint());
+    }
+
+    public function testIsMusementApiSet()
+    {
+        static::$musementCitiesInstance = new MusementCities;
+
+        $this->assertFalse(static::$musementCitiesInstance->isMusementApiSet());
+
+        $dummyString = md5(time());
+        static::$musementCitiesInstance->setMusementApiUri($dummyString);
+
+        $this->assertTrue(static::$musementCitiesInstance->isMusementApiSet());
     }
 }
